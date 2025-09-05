@@ -13,7 +13,7 @@ export function UserAvatar({
 } & ComponentProps<typeof Avatar>) {
   return (
     <Avatar {...props}>
-      <AvatarImage src={user.imageUrl} alt={user.name} className="size-4" />
+      <AvatarImage src={user.imageUrl} alt={user.name} />
       <AvatarFallback className="uppercase">
         {user.name
           .split(" ")
