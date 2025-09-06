@@ -28,6 +28,7 @@ export function Navbar({ user }: { user: { name: string, imageUrl: string } }) {
                     <span className="text-xl font-bold">Landr</span>
                 </Link>
         
+        
                 <div className="flex items-center gap-4">
 
         
