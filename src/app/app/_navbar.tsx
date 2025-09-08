@@ -7,6 +7,7 @@ import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { UserAvatar } from "@/features/users/components/userAvatar";
+import { Button } from "@/components/ui/button";
 
 const navLinks = [
     { name: "Interviews", href: "interviews", Icon: SpeechIcon },
@@ -30,8 +31,26 @@ export function Navbar({ user }: { user: { name: string, imageUrl: string } }) {
         
         
                 <div className="flex items-center gap-4">
+                    {typeof jobInfoId === "string" &&
+                        navLinks.map(({ name, href, Icon }) => {
+                            const hrefPath = `/app/job-infos/${jobInfoId}/${href}`
 
-        
+                            return (
+                                <Button
+                                    variant={pathName === hrefPath ? "secondary" : "ghost"}
+                                    key={name}
+                                    asChild
+                                    className="cursor-pointer max-sm:hidden"
+                                >
+                                    <Link href={hrefPath}>
+                                        <Icon />
+                                        {name}
+                                    </Link>
+                                </Button>
+                            )
+                        })
+                    }
+            
                     <ThemeToggle />
         
                     <DropdownMenu>
