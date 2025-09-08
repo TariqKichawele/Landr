@@ -3,7 +3,7 @@ import { Loader2Icon } from "lucide-react";
 import { Suspense } from "react";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import { JobInfoTable } from "@/drizzle/schema";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { db } from "@/drizzle/db";
 import { getJobInfoIdTag } from "@/features/jobInfos/dbCache";
 import { and, eq } from "drizzle-orm";
@@ -11,6 +11,7 @@ import { fetchAccessToken } from "hume";
 import { serverEnv } from "@/data/env/server";
 import { VoiceProvider } from "@humeai/voice-react";
 import { StartCall } from "./_StartCall";
+import { canCreateInterview } from "@/features/interviews/permissions";
 
 
 export default async function NewInterviewPage({ params }: { params: Promise<{ jobInfoId: string }> }) {
@@ -32,6 +33,8 @@ export default async function NewInterviewPage({ params }: { params: Promise<{ j
 async function SuspendedComponent({ jobInfoId }: { jobInfoId: string }) {
     const { userId, redirectToSignIn, user } = await getCurrentUser({ allData: true });
     if (userId == null || user == null) return redirectToSignIn();
+
+    if (!await canCreateInterview()) return redirect("/app/upgrade");
 
     const jobInfo = await getJobInfo(jobInfoId, userId);
     if (jobInfo == null) return notFound();
