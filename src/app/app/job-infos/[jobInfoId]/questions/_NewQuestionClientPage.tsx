@@ -32,6 +32,7 @@ const NewQuestionClientPage = ({
         completion: question,
         setCompletion: setQuestion,
         isLoading: isGeneratingQuestion,
+        data
     } = useCompletion({
         api: "/api/ai/questions/generate-question",
         onFinish: () => {
@@ -41,6 +42,8 @@ const NewQuestionClientPage = ({
             errorToast(e.message)
         }
     })
+
+    console.log(question);
 
     const {
         complete: generateFeedback,
@@ -57,17 +60,26 @@ const NewQuestionClientPage = ({
         },
     })
 
-    const questionId = null;
+    const questionId = useMemo(() => {
+        const item = data?.at(-1);
+        if (item == null) return null;
+
+        const parsed = z.object({ questionId: z.string() }).safeParse(item);
+        if (!parsed.success) return null;
+
+        return parsed.data.questionId;
+    }, [data])
 
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full mx-w-[2000px] mx-auto flex-grow h-screen-header">
+    <div className="flex flex-col items-center gap-4 w-full max-w-[2000px] mx-auto flex-grow h-screen-header">
         <div className="container flex gap-4 mt-4 items-center justify-between">
             <div className="flex-grow basis-0">
                 <BackLink href={`/app/job-infos/${jobInfo.id}`}>
                     {jobInfo.name}
                 </BackLink>
             </div>
+            
             <Controls
                 reset={() => {
                     setStatus("init")
@@ -96,11 +108,11 @@ const NewQuestionClientPage = ({
             <div className="flex-grow hidden md:block" />
         </div>
         <QuestionContainer
-            question={null}
-            feedback={null}
-            answer={null}
-            status="init"
-            setAnswer={() => {}}
+            question={question}
+            feedback={feedback}
+            answer={answer}
+            status={status}
+            setAnswer={setAnswer}
         />
     </div>
   )
@@ -178,12 +190,12 @@ const QuestionContainer = ({
             <ResizablePanelGroup direction="vertical" className="flex-grow">
                 <ResizablePanel id="question" defaultSize={25} minSize={5}>
                     <ScrollArea className="h-full min-w-48 *:h-full">
-                        {status === "init" && question == null ? (
+                        {status === "init" && (!question || question.trim() === "") ? (
                             <p className="text-base md:text-lg flex items-center justify-center h-full p-6">
                                 Get started by selecting a question difficulty above.
                             </p>
                         ) : (
-                            question && (
+                            !!question && (
                                 <MarkdownRenderer className="p-6">
                                     {question}
                                 </MarkdownRenderer>
