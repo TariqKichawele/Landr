@@ -17,6 +17,9 @@ import { Suspense } from 'react';
 import { condenseChatMessages } from '@/services/hume/lib/condensedChatMessages';
 import { fetchChatMessages } from '@/services/hume/lib/api';
 import CondensedMessages from '@/services/hume/components/CondensedMessages';
+import { ActionButton } from '@/components/ui/action-button';
+import { generateInterviewFeedback } from '@/features/interviews/actions';
+import { MarkdownRenderer } from '@/components/MarkdownRenderer';
 
 const InterviewPage = async ({ params }: { params: Promise<{ jobInfoId: string, interviewId: string }> }) => {
   const { jobInfoId, interviewId } = await params;
@@ -61,7 +64,9 @@ const InterviewPage = async ({ params }: { params: Promise<{ jobInfoId: string, 
                     fallback={<SkeletonButton className="w-32" />}
                     result={i =>
                         i.feedback == null ? (
-                            <Button>Generate Feedback</Button>
+                            <ActionButton action={generateInterviewFeedback.bind(null, i.id)}>
+                                Generate Feedback
+                            </ActionButton>
                         ) : (
                             <Dialog>
                                 <DialogTrigger asChild>
@@ -69,7 +74,7 @@ const InterviewPage = async ({ params }: { params: Promise<{ jobInfoId: string, 
                                 </DialogTrigger>
                                 <DialogContent className="md:max-w-3xl lg:max-w-4xl max-h-[calc(100%-2rem)] overflow-y-auto flex flex-col">
                                     <DialogTitle>Feedback</DialogTitle>
-                                    <div>{i.feedback}</div>
+                                    <MarkdownRenderer>{i.feedback}</MarkdownRenderer>
                                 </DialogContent>
                             </Dialog>
                         )
