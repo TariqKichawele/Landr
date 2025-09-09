@@ -5,11 +5,14 @@ import { db } from "@/drizzle/db";
 import { InterviewTable, JobInfoTable } from "@/drizzle/schema";
 import { getJobInfoIdTag } from "@/features/jobInfos/dbCache";
 import { getCurrentUser } from "@/services/clerk/lib/getCurrentUser";
-import arcjet, { tokenBucket } from "@arcjet/next"
+import arcjet, { tokenBucket, request } from "@arcjet/next"
 import { and, eq } from "drizzle-orm";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
 import { insertInterview, updateInterview as updateInterviewDb } from "./db";
 import { getInterviewIdTag } from "./dbCache";
+import { canCreateInterview } from "./permissions";
+import { RATE_LIMIT_MESSAGE } from "@/lib/errorToast";
+import { generateAiInterviewFeedback } from "@/services/ai/interviews";
 
 const aj = arcjet({
     characteristics: ["userId"],
@@ -35,6 +38,25 @@ export async function createInterview({ jobInfoId }: { jobInfoId: string })
         }
     }
 
+    if (!await canCreateInterview()) {
+        return {
+            error: true,
+            message: "Plan limit reached",
+        }
+    }
+
+    const decision = await aj.protect(await request(), {
+        userId,
+        requested: 1,
+    })
+
+    if (decision.isDenied()) {
+        return {
+            error: true,
+            message: RATE_LIMIT_MESSAGE 
+        }
+    }
+
     const jobInfo = await getJobInfo(jobInfoId, userId);
     if (jobInfo == null) {
         return {
@@ -46,6 +68,49 @@ export async function createInterview({ jobInfoId }: { jobInfoId: string })
     const interview = await insertInterview({ jobInfoId, duration: "00:00:00" });
 
     return { error: false, id: interview.id };
+}
+
+export async function generateInterviewFeedback(interviewId: string) {
+    const { userId, user } = await getCurrentUser({ allData: true });
+    if (userId == null) {
+        return {
+            error: true,
+            message: "Unauthorized",
+        }
+    }
+
+    const interview = await getInterview(interviewId, userId);
+    if (interview == null) {
+        return {
+            error: true,
+            message: "Interview not found",
+        }
+    }
+
+    if (interview.humeChatId == null) {
+        return {
+            error: true,
+            message: "Interview has no chat",
+        }
+    }
+
+    const feedback = await generateAiInterviewFeedback({
+        humeChatId: interview.humeChatId,
+        jobInfo: interview.jobInfo,
+        userName: user?.name ?? "",
+    });
+
+    if (feedback == null) {
+        return {
+            error: true,
+            message: "Failed to generate feedback",
+        }
+    }
+    
+    await updateInterviewDb(interviewId, { feedback });
+
+    return { error: false };
+
 }
 
 async function getJobInfo(id: string, userId: string) {
