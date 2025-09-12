@@ -6,7 +6,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { MarkdownRenderer } from '@/components/MarkdownRenderer'
 import { Textarea } from '@/components/ui/textarea'
 import { JobInfoTable, questionDifficulties, QuestionDifficulty } from '@/drizzle/schema'
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { LoadingSwap } from '@/components/ui/loading-swap'
 import { formatQuestionDifficulty } from '@/features/questions/formatters'
@@ -42,8 +42,6 @@ const NewQuestionClientPage = ({
             errorToast(e.message)
         }
     })
-
-    console.log(question);
 
     const {
         complete: generateFeedback,
