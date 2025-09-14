@@ -1,6 +1,6 @@
 import { getCurrentUser } from '@/services/clerk/lib/getCurrentUser';
 import { notFound } from 'next/navigation';
-import { cacheTag } from 'next/dist/server/use-cache/cache-tag';
+import { unstable_cacheTag as cacheTag } from 'next/cache';
 import { getJobInfoIdTag } from '@/features/jobInfos/dbCache';
 import { db } from '@/drizzle/db';
 import { and, eq } from 'drizzle-orm';

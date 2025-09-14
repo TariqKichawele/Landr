@@ -1,7 +1,7 @@
 import { getCurrentUser } from "@/services/clerk/lib/getCurrentUser";
 import { Loader2Icon } from "lucide-react";
 import { Suspense } from "react";
-import { cacheTag } from "next/dist/server/use-cache/cache-tag";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 import { JobInfoTable } from "@/drizzle/schema";
 import { notFound, redirect } from "next/navigation";
 import { db } from "@/drizzle/db";

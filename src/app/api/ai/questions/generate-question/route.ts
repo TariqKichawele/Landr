@@ -5,7 +5,7 @@ import { canCreateQuestion } from "@/features/questions/permissions";
 import { PLAN_LIMIT_MESSAGE } from "@/lib/errorToast";
 import { getCurrentUser } from "@/services/clerk/lib/getCurrentUser";
 import { and, asc, eq } from "drizzle-orm";
-import { cacheTag } from "next/dist/server/use-cache/cache-tag";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 import z from "zod";
 import { createDataStreamResponse } from "ai";
 import { getQuestionJobInfoTag } from "@/features/questions/dbCache";

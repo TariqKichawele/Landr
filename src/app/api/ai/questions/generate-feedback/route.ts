@@ -1,7 +1,7 @@
 import { generateAiQuestionFeedback } from "@/services/ai/questions";
 import { getCurrentUser } from "@/services/clerk/lib/getCurrentUser";
 import z from "zod";
-import { cacheTag } from "next/dist/server/use-cache/cache-tag";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 import { getQuestionIdTag } from "@/features/questions/dbCache";
 import { getJobInfoIdTag } from "@/features/jobInfos/dbCache";
 import { db } from "@/drizzle/db";

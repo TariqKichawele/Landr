@@ -6,7 +6,7 @@ import { PLAN_LIMIT_MESSAGE } from "@/lib/errorToast";
 import { analyzeResumeForJob } from "@/services/ai/resumes/ai";
 import { getCurrentUser } from "@/services/clerk/lib/getCurrentUser";
 import { and, eq } from "drizzle-orm";
-import { cacheTag } from "next/dist/server/use-cache/cache-tag";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 
 
 export async function POST(req: Request) {

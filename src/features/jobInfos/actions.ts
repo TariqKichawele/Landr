@@ -5,7 +5,7 @@ import { jobInfoSchema } from "./schema"
 import z from "zod"
 import { redirect } from "next/navigation";
 import { insertJobInfo, updateJobInfo as updateJobInfoDb } from "./db";
-import { cacheTag } from "next/dist/server/use-cache/cache-tag";
+import { unstable_cacheTag as cacheTag } from "next/cache";
 import { db } from "@/drizzle/db";
 import { eq, and } from "drizzle-orm";
 import { JobInfoTable } from "@/drizzle/schema";

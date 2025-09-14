@@ -3,7 +3,7 @@ import { db } from "@/drizzle/db"
 import { JobInfoTable } from "@/drizzle/schema"
 import { cn } from "@/lib/utils"
 import { eq } from "drizzle-orm"
-import { cacheTag } from "next/dist/server/use-cache/cache-tag"
+import { unstable_cacheTag as cacheTag } from "next/cache"
 import { Suspense } from "react"
 import { getJobInfoIdTag } from "../dbCache"
 

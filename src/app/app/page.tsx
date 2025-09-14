@@ -2,7 +2,7 @@ import { db } from '@/drizzle/db';
 import { JobInfoTable } from '@/drizzle/schema';
 import { getJobInfoUserTag } from '@/features/jobInfos/dbCache';
 import { getCurrentUser } from '@/services/clerk/lib/getCurrentUser'
-import { cacheTag } from 'next/dist/server/use-cache/cache-tag';
+import { unstable_cacheTag as cacheTag } from 'next/cache';
 import { eq, desc } from 'drizzle-orm';
 import { Suspense } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';

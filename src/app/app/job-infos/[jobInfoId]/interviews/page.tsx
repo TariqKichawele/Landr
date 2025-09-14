@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { cacheTag } from 'next/dist/server/use-cache/cache-tag';
+import { unstable_cacheTag as cacheTag } from 'next/cache';
 import { getJobInfoIdTag } from '@/features/jobInfos/dbCache';
 import { db } from '@/drizzle/db';
 import { and, desc, eq, isNotNull } from 'drizzle-orm';

@@ -3,7 +3,7 @@ import { InterviewTable } from '@/drizzle/schema';
 import { getInterviewIdTag } from '@/features/interviews/dbCache';
 import { getCurrentUser } from '@/services/clerk/lib/getCurrentUser';
 import { eq } from 'drizzle-orm';
-import { cacheTag } from 'next/dist/server/use-cache/cache-tag';
+import { unstable_cacheTag as cacheTag } from 'next/cache';
 import { notFound } from 'next/navigation';
 import { getJobInfoIdTag } from '@/features/jobInfos/dbCache';
 import { BackLink } from '@/components/BackLink';

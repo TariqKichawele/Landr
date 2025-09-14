@@ -2,7 +2,7 @@ import { Loader2Icon } from 'lucide-react';
 import { notFound, redirect } from 'next/navigation';
 import { Suspense } from 'react'
 import { getCurrentUser } from '@/services/clerk/lib/getCurrentUser';
-import { cacheTag } from 'next/dist/server/use-cache/cache-tag';
+import { unstable_cacheTag as cacheTag } from 'next/cache';
 import { JobInfoTable } from '@/drizzle/schema';
 import { db } from '@/drizzle/db';
 import { getJobInfoIdTag } from '@/features/jobInfos/dbCache';
