@@ -2,14 +2,13 @@ import { db } from '@/drizzle/db';
 import { JobInfoTable } from '@/drizzle/schema';
 import { getJobInfoUserTag } from '@/features/jobInfos/dbCache';
 import { getCurrentUser } from '@/services/clerk/lib/getCurrentUser'
-import { Loader2Icon } from 'lucide-react'
 import { cacheTag } from 'next/dist/server/use-cache/cache-tag';
 import { eq, desc } from 'drizzle-orm';
 import { Suspense } from 'react'
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { PlusIcon, ArrowRightIcon } from 'lucide-react';
+import { PlusIcon, ArrowRightIcon, Loader2Icon } from 'lucide-react';
 import { formatExperienceLevel } from '@/features/jobInfos/lib/formatters';
 import Link from 'next/link';
 import JobInfoForm from '@/features/jobInfos/components/JobInfoForm';

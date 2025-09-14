@@ -33,6 +33,7 @@ export async function generateAiInterviewFeedback({
             message.role === "USER" ? message.emotionFeatures : undefined,
         }
     })
+    .filter(f => f != null)
 
     const { text } = await generateText({
         model: google("gemini-2.5-flash"),
